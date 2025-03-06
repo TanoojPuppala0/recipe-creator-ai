@@ -22,13 +22,22 @@ interface RecipeDisplayProps {
 const RecipeDisplay = ({ recipe, onClose }: RecipeDisplayProps) => {
   if (!recipe) return null;
 
+  // Function to generate a placeholder image URL based on recipe title
+  const getRecipeImage = () => {
+    if (recipe.image) return recipe.image;
+    
+    // Generate a food-related image based on the recipe title
+    const encodedTitle = encodeURIComponent(recipe.title);
+    return `https://source.unsplash.com/1600x900/?food,${encodedTitle}`;
+  };
+
   return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 backdrop flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 backdrop-blur-md bg-black/50 flex items-center justify-center p-4"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -38,17 +47,11 @@ const RecipeDisplay = ({ recipe, onClose }: RecipeDisplayProps) => {
           className="w-full max-w-4xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-2xl"
         >
           <div className="relative h-64">
-            {recipe.image ? (
-              <img 
-                src={recipe.image} 
-                alt={recipe.title} 
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-r from-blue-100 to-indigo-100 flex items-center justify-center">
-                <ChefHat className="h-16 w-16 text-blue-500" />
-              </div>
-            )}
+            <img 
+              src={getRecipeImage()} 
+              alt={recipe.title} 
+              className="w-full h-full object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
               <h1 className="text-white text-3xl font-display font-medium">{recipe.title}</h1>
               <div className="flex flex-wrap gap-3 mt-2">
@@ -73,36 +76,50 @@ const RecipeDisplay = ({ recipe, onClose }: RecipeDisplayProps) => {
           <div className="p-6 overflow-y-auto max-h-[calc(90vh-16rem)]">
             <div className="grid md:grid-cols-3 gap-6">
               <div className="md:col-span-1">
-                <div className="bg-gray-50 rounded-xl p-4">
+                <div className="bg-gray-50 rounded-xl p-4 shadow-sm">
                   <h3 className="font-medium text-lg flex items-center mb-3">
                     <ShoppingCart className="mr-2 h-4 w-4 text-blue-500" /> 
                     Ingredients
                   </h3>
-                  <ul className="space-y-2">
-                    {recipe.ingredients.map((ingredient, index) => (
-                      <li key={index} className="flex items-start">
-                        <CheckCircle2 className="h-4 w-4 text-blue-500 mr-2 mt-1 flex-shrink-0" />
-                        <span className="text-sm">{ingredient}</span>
-                      </li>
-                    ))}
+                  <ul className="space-y-3">
+                    {recipe.ingredients.map((ingredient, index) => {
+                      // Split ingredient into amount and name if possible
+                      const match = ingredient.match(/^([\d\s/]+\s*(?:cup|tablespoon|teaspoon|tbsp|tsp|g|kg|ml|l|oz|lb|piece|clove|bunch|pinch|to taste)s?)?(.+)$/i);
+                      
+                      const amount = match && match[1] ? match[1].trim() : "";
+                      const name = match && match[2] ? match[2].trim() : ingredient;
+                      
+                      return (
+                        <li key={index} className="flex items-start bg-white p-2 rounded-md shadow-sm">
+                          <CheckCircle2 className="h-4 w-4 text-blue-500 mr-2 mt-1 flex-shrink-0" />
+                          <div>
+                            {amount && <span className="text-sm font-medium">{amount} </span>}
+                            <span className="text-sm">{name}</span>
+                          </div>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
-                {recipe.video && (
-                  <div className="mt-4 bg-gray-50 rounded-xl p-4">
-                    <h3 className="font-medium text-lg flex items-center mb-3">
-                      <Play className="mr-2 h-4 w-4 text-blue-500" /> 
-                      AI Cooking Video
-                    </h3>
-                    <div className="relative aspect-video bg-gray-200 rounded-lg overflow-hidden">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Button className="bg-blue-500 hover:bg-blue-600">
-                          <Play className="h-4 w-4 mr-2" /> Watch Video
-                        </Button>
-                      </div>
+                <div className="mt-4 bg-gray-50 rounded-xl p-4 shadow-sm">
+                  <h3 className="font-medium text-lg flex items-center mb-3">
+                    <Play className="mr-2 h-4 w-4 text-blue-500" /> 
+                    AI Cooking Video
+                  </h3>
+                  <div className="relative aspect-video bg-gray-200 rounded-lg overflow-hidden">
+                    <img 
+                      src={`https://source.unsplash.com/800x450/?cooking,${encodeURIComponent(recipe.title)}`}
+                      alt="Cooking preview" 
+                      className="w-full h-full object-cover opacity-70" 
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Button className="bg-blue-500 hover:bg-blue-600">
+                        <Play className="h-4 w-4 mr-2" /> Watch Video
+                      </Button>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
 
               <div className="md:col-span-2">
@@ -112,7 +129,7 @@ const RecipeDisplay = ({ recipe, onClose }: RecipeDisplayProps) => {
                 </h3>
                 <ol className="space-y-6">
                   {recipe.instructions.map((instruction, index) => (
-                    <li key={index} className="relative pl-10">
+                    <li key={index} className="relative pl-10 bg-gray-50 p-4 rounded-xl shadow-sm">
                       <span className="absolute left-0 top-0 flex items-center justify-center w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-medium text-sm">
                         {index + 1}
                       </span>
@@ -124,11 +141,12 @@ const RecipeDisplay = ({ recipe, onClose }: RecipeDisplayProps) => {
                 {recipe.tips && recipe.tips.length > 0 && (
                   <>
                     <Separator className="my-6" />
-                    <div className="bg-blue-50 rounded-xl p-4">
+                    <div className="bg-blue-50 rounded-xl p-4 shadow-sm">
                       <h3 className="font-medium text-lg mb-3">Chef's Tips</h3>
                       <ul className="space-y-2">
                         {recipe.tips.map((tip, index) => (
-                          <li key={index} className="text-sm text-gray-700">
+                          <li key={index} className="text-sm text-gray-700 flex items-start">
+                            <span className="text-blue-500 mr-2">•</span>
                             {tip}
                           </li>
                         ))}

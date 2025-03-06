@@ -31,7 +31,7 @@ const Header = () => {
           transition={{ delay: 0.2, duration: 0.5 }}
         >
           <span className="text-xl md:text-2xl font-display font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-            Dishcover AI
+            Cook-key
           </span>
         </motion.div>
         

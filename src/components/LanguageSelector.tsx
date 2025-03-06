@@ -20,6 +20,7 @@ const languages = [
   { value: 'ko', label: 'Korean' },
   { value: 'ar', label: 'Arabic' },
   { value: 'hi', label: 'Hindi' },
+  { value: 'te', label: 'Telugu' },
 ];
 
 interface LanguageSelectorProps {

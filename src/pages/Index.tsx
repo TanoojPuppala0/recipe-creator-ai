@@ -47,7 +47,7 @@ const Index = () => {
             </motion.div>
 
             <h1 className="text-4xl md:text-6xl font-display font-medium tracking-tight">
-              AI-Powered Recipe Generator
+              Cook-key Recipe Generator
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Upload food images or search by name to get AI-generated recipes with cooking instructions and videos.
@@ -105,7 +105,7 @@ const Index = () => {
 
         <footer className="bg-white border-t mt-24 py-8">
           <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
-            <p>© {new Date().getFullYear()} Dishcover AI • AI-Powered Recipe Generator</p>
+            <p>© {new Date().getFullYear()} Cook-key • AI-Powered Recipe Generator</p>
           </div>
         </footer>
       </main>

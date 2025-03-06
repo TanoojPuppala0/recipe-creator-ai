@@ -78,6 +78,56 @@ const mockRecipes: { [key: string]: Recipe } = {
     ],
     video: 'https://example.com/video/chocolate-cake'
   },
+  'biryani': {
+    title: 'Fragrant Chicken Biryani',
+    cookTime: '1 hour 30 minutes',
+    servings: 6,
+    ingredients: [
+      '2 cups basmati rice',
+      '800g chicken thighs, bone-in',
+      '2 large onions, thinly sliced',
+      '4 cloves garlic, minced',
+      '2 inch piece ginger, grated',
+      '3 green chilies, slit',
+      '2 tomatoes, chopped',
+      '1/2 cup plain yogurt',
+      '1/4 cup fresh mint leaves',
+      '1/2 cup fresh coriander leaves',
+      '2 tbsp biryani masala',
+      '1 tsp turmeric powder',
+      '1 tsp red chili powder',
+      '2 tsp garam masala',
+      '4 tbsp ghee or oil',
+      '2 bay leaves',
+      '4 green cardamom pods',
+      '1 stick cinnamon',
+      '4 cloves',
+      'Pinch of saffron soaked in 2 tbsp warm milk',
+      'Salt to taste'
+    ],
+    instructions: [
+      'Wash the rice and soak for 30 minutes. Drain well.',
+      'In a large bowl, marinate the chicken with yogurt, half of the garlic, ginger, turmeric, red chili powder, 1 tsp garam masala, and salt for at least 30 minutes.',
+      'Heat 2 tbsp ghee in a large heavy-bottomed pot. Add the sliced onions and fry until golden brown. Remove half and set aside for garnish.',
+      'Add bay leaves, cardamom, cinnamon, and cloves to the pot. Sauté for 30 seconds until fragrant.',
+      'Add the remaining garlic, ginger, and green chilies. Sauté for 1-2 minutes.',
+      'Add chopped tomatoes and cook until soft and oil separates, about 5 minutes.',
+      'Add the marinated chicken with its marinade. Cook on medium heat for 5 minutes, stirring occasionally.',
+      'Add biryani masala, half of the mint and coriander leaves. Cover and cook for 15 minutes until chicken is nearly done.',
+      'In a separate pot, bring water to a boil. Add salt and the soaked rice. Cook until rice is 70% done, about 5-7 minutes. Drain well.',
+      'Layer the partially cooked rice over the chicken. Sprinkle remaining garam masala, mint, and coriander leaves.',
+      'Pour the saffron milk over the rice. Dot with remaining ghee.',
+      'Cover with a tight-fitting lid. Cook on low heat for 20-25 minutes until the rice is fully cooked and fragrant.',
+      'Let it rest for 10 minutes before opening the lid. Gently mix the layers before serving.',
+      'Garnish with the reserved fried onions and serve hot.'
+    ],
+    tips: [
+      'The key to a good biryani is cooking the rice to exactly 70% before the layering process.',
+      'For an authentic touch, seal the pot with dough around the edges of the lid to trap the steam.',
+      'Allow the biryani to rest after cooking - this helps the flavors meld together perfectly.'
+    ],
+    video: 'https://example.com/video/biryani'
+  },
   'example dish': {
     title: 'Mediterranean Grilled Salmon',
     cookTime: '30 minutes',
@@ -117,37 +167,37 @@ export const generateRecipe = (dishName: string, language: string = 'en'): Recip
   const normalizedDishName = dishName.toLowerCase().trim();
   
   // Check if we have a mock recipe for this dish
-  if (mockRecipes[normalizedDishName]) {
-    return mockRecipes[normalizedDishName];
-  }
+  let recipe = mockRecipes[normalizedDishName] 
+    ? {...mockRecipes[normalizedDishName]} 
+    : {
+        title: dishName.charAt(0).toUpperCase() + dishName.slice(1),
+        cookTime: '30 minutes',
+        servings: 4,
+        ingredients: [
+          '2 cups main ingredient',
+          '1 tablespoon olive oil',
+          '2 cloves garlic, minced',
+          '1 onion, chopped',
+          'Salt and pepper to taste',
+          'Fresh herbs for garnish'
+        ],
+        instructions: [
+          'Prepare all ingredients by washing, peeling, and chopping as needed.',
+          'Heat olive oil in a large pan over medium heat.',
+          'Add garlic and onion, cook until fragrant and translucent.',
+          'Add the main ingredient and cook for about 10 minutes.',
+          'Season with salt and pepper to taste.',
+          'Garnish with fresh herbs before serving.'
+        ],
+        tips: [
+          'This is a versatile recipe that can be adapted with different spices and herbs.',
+          'For a heartier meal, serve with rice or crusty bread.'
+        ],
+        video: 'https://example.com/video/generic-recipe'
+      };
   
-  // If not found, return a generic recipe
-  return {
-    title: dishName.charAt(0).toUpperCase() + dishName.slice(1),
-    cookTime: '30 minutes',
-    servings: 4,
-    ingredients: [
-      '2 cups main ingredient',
-      '1 tablespoon olive oil',
-      '2 cloves garlic, minced',
-      '1 onion, chopped',
-      'Salt and pepper to taste',
-      'Fresh herbs for garnish'
-    ],
-    instructions: [
-      'Prepare all ingredients by washing, peeling, and chopping as needed.',
-      'Heat olive oil in a large pan over medium heat.',
-      'Add garlic and onion, cook until fragrant and translucent.',
-      'Add the main ingredient and cook for about 10 minutes.',
-      'Season with salt and pepper to taste.',
-      'Garnish with fresh herbs before serving.'
-    ],
-    tips: [
-      'This is a versatile recipe that can be adapted with different spices and herbs.',
-      'For a heartier meal, serve with rice or crusty bread.'
-    ],
-    video: 'https://example.com/video/generic-recipe'
-  };
+  // Translate the recipe based on the language
+  return translateRecipe(recipe, language);
 };
 
 // In a real implementation, you'd have different translations or API calls for different languages
@@ -159,7 +209,28 @@ export const translateRecipe = (recipe: Recipe, language: string): Recipe => {
     return recipe;
   }
   
-  // Mock translation - in a real app you would do proper translation
+  // Basic translation mapping for demonstration
+  const translations: {[key: string]: {title: string}} = {
+    'es': { title: `${recipe.title} (Spanish)` },
+    'fr': { title: `${recipe.title} (French)` },
+    'de': { title: `${recipe.title} (German)` },
+    'it': { title: `${recipe.title} (Italian)` },
+    'zh': { title: `${recipe.title} (Chinese)` },
+    'ja': { title: `${recipe.title} (Japanese)` },
+    'ko': { title: `${recipe.title} (Korean)` },
+    'ar': { title: `${recipe.title} (Arabic)` },
+    'hi': { title: `${recipe.title} (Hindi)` },
+    'te': { title: `${recipe.title} (Telugu)` },
+  };
+  
+  if (translations[language]) {
+    return {
+      ...recipe,
+      title: translations[language].title,
+    };
+  }
+  
+  // Default fallback
   return {
     ...recipe,
     title: `${recipe.title} (${language})`,
