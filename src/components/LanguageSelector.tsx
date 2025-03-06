@@ -3,13 +3,6 @@ import { useState, useEffect } from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command';
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -56,19 +49,19 @@ const LanguageSelector = ({ onChange }: LanguageSelectorProps) => {
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0 bg-white">
-          <Command>
-            <CommandInput placeholder="Search language..." />
-            <CommandEmpty>No language found.</CommandEmpty>
-            <CommandGroup>
+          <div className="w-full max-h-[300px] overflow-y-auto rounded-md">
+            <div className="flex flex-col w-full py-2">
               {languages.map((language) => (
-                <CommandItem
+                <div
                   key={language.value}
-                  value={language.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue);
+                  className={cn(
+                    "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-blue-50",
+                    value === language.value && "bg-blue-50"
+                  )}
+                  onClick={() => {
+                    setValue(language.value);
                     setOpen(false);
                   }}
-                  className="flex items-center transition-colors hover:bg-blue-50"
                 >
                   <Check
                     className={cn(
@@ -77,10 +70,10 @@ const LanguageSelector = ({ onChange }: LanguageSelectorProps) => {
                     )}
                   />
                   {language.label}
-                </CommandItem>
+                </div>
               ))}
-            </CommandGroup>
-          </Command>
+            </div>
+          </div>
         </PopoverContent>
       </Popover>
     </div>
