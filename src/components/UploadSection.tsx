@@ -82,6 +82,11 @@ const UploadSection = ({ onRecipeGenerated }: UploadSectionProps) => {
     }
   };
 
+  const handleLanguageChange = (value: string) => {
+    setLanguage(value);
+    console.log(`Language changed to: ${value}`);
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8" id="upload">
       <div className="space-y-4 mb-8 text-center">
@@ -111,7 +116,7 @@ const UploadSection = ({ onRecipeGenerated }: UploadSectionProps) => {
       >
         <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
           <div className="w-full md:w-auto">
-            <LanguageSelector onChange={setLanguage} />
+            <LanguageSelector onChange={handleLanguageChange} />
           </div>
         </div>
 

@@ -55,7 +55,7 @@ const LanguageSelector = ({ onChange }: LanguageSelectorProps) => {
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full md:w-[200px] p-0 glass-panel">
+        <PopoverContent className="w-full p-0">
           <Command>
             <CommandInput placeholder="Search language..." />
             <CommandEmpty>No language found.</CommandEmpty>

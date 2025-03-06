@@ -43,6 +43,11 @@ const SearchByName = ({ onRecipeGenerated }: SearchByNameProps) => {
     }
   };
 
+  const handleLanguageChange = (value: string) => {
+    setLanguage(value);
+    console.log(`Language changed to: ${value}`);
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-16" id="search">
       <div className="space-y-4 mb-8 text-center">
@@ -85,7 +90,7 @@ const SearchByName = ({ onRecipeGenerated }: SearchByNameProps) => {
             </div>
           </div>
           <div className="w-full md:w-auto">
-            <LanguageSelector onChange={setLanguage} />
+            <LanguageSelector onChange={handleLanguageChange} />
           </div>
         </div>
 
