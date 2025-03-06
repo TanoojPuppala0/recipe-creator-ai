@@ -55,11 +55,11 @@ const LanguageSelector = ({ onChange }: LanguageSelectorProps) => {
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0">
+        <PopoverContent className="w-full p-0 bg-white">
           <Command>
             <CommandInput placeholder="Search language..." />
             <CommandEmpty>No language found.</CommandEmpty>
-            <CommandGroup className="max-h-[300px] overflow-y-auto">
+            <CommandGroup>
               {languages.map((language) => (
                 <CommandItem
                   key={language.value}
