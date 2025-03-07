@@ -1,16 +1,19 @@
-
 // This is a mock implementation for demonstration purposes
 // In a real application, this would connect to a backend service or API
 
 interface Recipe {
   title: string;
+  originalTitle?: string;
   image?: string;
   cookTime: string;
   servings: number;
   ingredients: string[];
+  originalIngredients?: string[];
   instructions: string[];
+  originalInstructions?: string[];
   tips?: string[];
   video?: string;
+  language?: string;
 }
 
 // Mock data for recipe generation
@@ -162,8 +165,60 @@ const mockRecipes: { [key: string]: Recipe } = {
   }
 };
 
-// Generate a recipe based on a dish name
-export const generateRecipe = (dishName: string, language: string = 'en'): Recipe => {
+// Function to adjust ingredient quantities based on serving size
+const adjustIngredientQuantities = (ingredients: string[], originalServings: number, newServings: number): string[] => {
+  if (originalServings === newServings) return ingredients;
+  
+  const ratio = newServings / originalServings;
+  
+  return ingredients.map(ingredient => {
+    // Match common measurement patterns
+    const regex = /^([\d\/\.\s]+)(\s*(?:cup|tablespoon|teaspoon|tbsp|tsp|g|kg|ml|l|oz|lb|pound|gram|piece|clove|bunch)s?)?(.+)$/i;
+    const match = ingredient.match(regex);
+    
+    if (match) {
+      const [, amount, unit, rest] = match;
+      
+      // Parse the amount
+      let numAmount: number;
+      
+      if (amount.includes('/')) {
+        // Handle fractions like "1/2"
+        const [numerator, denominator] = amount.split('/').map(n => parseFloat(n.trim()));
+        numAmount = numerator / denominator;
+      } else {
+        numAmount = parseFloat(amount.trim());
+      }
+      
+      if (!isNaN(numAmount)) {
+        // Adjust the amount
+        const newAmount = numAmount * ratio;
+        
+        // Format the new amount
+        let formattedAmount: string;
+        if (newAmount < 1 && newAmount > 0) {
+          // Convert to fraction if it's a simple fraction
+          if (Math.abs(newAmount - 0.25) < 0.01) formattedAmount = '1/4';
+          else if (Math.abs(newAmount - 0.33) < 0.01) formattedAmount = '1/3';
+          else if (Math.abs(newAmount - 0.5) < 0.01) formattedAmount = '1/2';
+          else if (Math.abs(newAmount - 0.66) < 0.01) formattedAmount = '2/3';
+          else if (Math.abs(newAmount - 0.75) < 0.01) formattedAmount = '3/4';
+          else formattedAmount = newAmount.toFixed(2);
+        } else {
+          // Round to 1 decimal place if necessary
+          formattedAmount = newAmount % 1 === 0 ? newAmount.toString() : newAmount.toFixed(1);
+        }
+        
+        return `${formattedAmount}${unit ? ' ' + unit : ''}${rest}`;
+      }
+    }
+    
+    return ingredient;
+  });
+};
+
+// Generate a recipe based on a dish name, language, and servings
+export const generateRecipe = (dishName: string, language: string = 'en', servings: number = 4): Recipe => {
   const normalizedDishName = dishName.toLowerCase().trim();
   
   // Check if we have a mock recipe for this dish
@@ -196,8 +251,35 @@ export const generateRecipe = (dishName: string, language: string = 'en'): Recip
         video: 'https://example.com/video/generic-recipe'
       };
   
+  // Save the original servings
+  const originalServings = recipe.servings;
+  
+  // Adjust ingredient quantities if servings are different
+  if (servings !== originalServings) {
+    recipe.ingredients = adjustIngredientQuantities(recipe.ingredients, originalServings, servings);
+    recipe.servings = servings;
+  }
+  
+  // Save original English recipe before translation
+  const originalRecipe = {
+    originalTitle: recipe.title,
+    originalIngredients: [...recipe.ingredients],
+    originalInstructions: [...recipe.instructions]
+  };
+  
   // Translate the recipe based on the language
-  return translateRecipe(recipe, language);
+  const translatedRecipe = translateRecipe(recipe, language);
+  
+  // If language is not English, include original English content
+  if (language !== 'en') {
+    return {
+      ...translatedRecipe,
+      ...originalRecipe,
+      language
+    };
+  }
+  
+  return translatedRecipe;
 };
 
 // In a real implementation, you'd have different translations or API calls for different languages
@@ -227,6 +309,10 @@ export const translateRecipe = (recipe: Recipe, language: string): Recipe => {
     return {
       ...recipe,
       title: translations[language].title,
+      // Here we would also translate ingredients and instructions
+      // This is just a mock so we're adding a language indicator
+      ingredients: recipe.ingredients.map(ing => `${ing} (${language})`),
+      instructions: recipe.instructions.map(ins => `${ins} (${language})`)
     };
   }
   
@@ -234,5 +320,7 @@ export const translateRecipe = (recipe: Recipe, language: string): Recipe => {
   return {
     ...recipe,
     title: `${recipe.title} (${language})`,
+    ingredients: recipe.ingredients.map(ing => `${ing} (${language})`),
+    instructions: recipe.instructions.map(ins => `${ins} (${language})`)
   };
 };
