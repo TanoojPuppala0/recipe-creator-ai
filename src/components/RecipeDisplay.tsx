@@ -1,10 +1,11 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, Clock, Users, ShoppingCart, ChefHat, Download, X, Play, Globe } from 'lucide-react';
+import { CheckCircle2, Clock, Users, ShoppingCart, ChefHat, Download, X, Play, Globe, Apple } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState, useEffect } from 'react';
 
 interface RecipeDisplayProps {
   recipe: {
@@ -14,17 +15,39 @@ interface RecipeDisplayProps {
     cookTime: string;
     servings: number;
     ingredients: string[];
-    instructions: string[];
     originalIngredients?: string[];
+    instructions: string[];
     originalInstructions?: string[];
     tips?: string[];
     video?: string;
     language?: string;
+    nutrition?: {
+      calories: string;
+      protein: string;
+      carbs: string;
+      fat: string;
+      fiber: string;
+    };
   } | null;
   onClose: () => void;
 }
 
 const RecipeDisplay = ({ recipe, onClose }: RecipeDisplayProps) => {
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
+  useEffect(() => {
+    // Listen for video toggle events
+    const handleToggleVideo = () => {
+      setIsVideoPlaying(true);
+    };
+
+    document.addEventListener('toggleVideo', handleToggleVideo);
+    
+    return () => {
+      document.removeEventListener('toggleVideo', handleToggleVideo);
+    };
+  }, []);
+
   if (!recipe) return null;
 
   // Function to generate a placeholder image URL based on recipe title
@@ -97,6 +120,11 @@ const RecipeDisplay = ({ recipe, onClose }: RecipeDisplayProps) => {
                     <Globe className="mr-1 h-3 w-3" /> {getLanguageName(recipe.language)}
                   </Badge>
                 )}
+                {recipe.nutrition && (
+                  <Badge variant="secondary" className="bg-white/20 backdrop-blur-md text-white border-none">
+                    <Apple className="mr-1 h-3 w-3" /> {recipe.nutrition.calories}
+                  </Badge>
+                )}
               </div>
             </div>
             <Button 
@@ -138,6 +166,39 @@ const RecipeDisplay = ({ recipe, onClose }: RecipeDisplayProps) => {
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Video player modal */}
+      {isVideoPlaying && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[60] backdrop-blur-xl bg-black/80 flex items-center justify-center p-4"
+        >
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.9 }}
+            className="w-full max-w-5xl aspect-video bg-black rounded-xl overflow-hidden relative"
+          >
+            <iframe 
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" 
+              className="w-full h-full"
+              title="Recipe Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+            <Button 
+              size="icon" 
+              variant="secondary" 
+              className="absolute top-4 right-4 bg-black/50 text-white hover:bg-black/70"
+              onClick={() => setIsVideoPlaying(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 };
@@ -182,6 +243,37 @@ const RecipeContent = ({ recipe, showOriginal }: {
           </ul>
         </div>
 
+        {recipe.nutrition && (
+          <div className="mt-4 bg-blue-50 rounded-xl p-4 shadow-sm">
+            <h3 className="font-medium text-lg flex items-center mb-3">
+              <Apple className="mr-2 h-4 w-4 text-blue-500" /> 
+              Nutritional Information
+            </h3>
+            <ul className="grid grid-cols-2 gap-2">
+              <li className="bg-white p-2 rounded-md shadow-sm">
+                <div className="text-xs text-gray-500">Calories</div>
+                <div className="text-sm font-medium">{recipe.nutrition.calories}</div>
+              </li>
+              <li className="bg-white p-2 rounded-md shadow-sm">
+                <div className="text-xs text-gray-500">Protein</div>
+                <div className="text-sm font-medium">{recipe.nutrition.protein}</div>
+              </li>
+              <li className="bg-white p-2 rounded-md shadow-sm">
+                <div className="text-xs text-gray-500">Carbs</div>
+                <div className="text-sm font-medium">{recipe.nutrition.carbs}</div>
+              </li>
+              <li className="bg-white p-2 rounded-md shadow-sm">
+                <div className="text-xs text-gray-500">Fat</div>
+                <div className="text-sm font-medium">{recipe.nutrition.fat}</div>
+              </li>
+              <li className="bg-white p-2 rounded-md shadow-sm col-span-2">
+                <div className="text-xs text-gray-500">Fiber</div>
+                <div className="text-sm font-medium">{recipe.nutrition.fiber}</div>
+              </li>
+            </ul>
+          </div>
+        )}
+
         <div className="mt-4 bg-gray-50 rounded-xl p-4 shadow-sm">
           <h3 className="font-medium text-lg flex items-center mb-3">
             <Play className="mr-2 h-4 w-4 text-blue-500" /> 
@@ -194,7 +286,7 @@ const RecipeContent = ({ recipe, showOriginal }: {
               className="w-full h-full object-cover opacity-70" 
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <Button className="bg-blue-500 hover:bg-blue-600">
+              <Button className="bg-blue-500 hover:bg-blue-600" onClick={() => document.dispatchEvent(new Event('toggleVideo'))}>
                 <Play className="h-4 w-4 mr-2" /> Watch Video
               </Button>
             </div>

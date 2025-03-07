@@ -1,12 +1,13 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, RefreshCw } from 'lucide-react';
+import { Search, RefreshCw, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import LanguageSelector from './LanguageSelector';
 import { generateRecipe } from '@/utils/recipeGenerator';
+import { Slider } from '@/components/ui/slider';
 
 interface SearchByNameProps {
   onRecipeGenerated: (recipe: any) => void;
@@ -16,6 +17,7 @@ const SearchByName = ({ onRecipeGenerated }: SearchByNameProps) => {
   const [dishName, setDishName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [language, setLanguage] = useState('en');
+  const [personCount, setPersonCount] = useState(4);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ const SearchByName = ({ onRecipeGenerated }: SearchByNameProps) => {
     try {
       // In a real application, we would call an API here
       setTimeout(() => {
-        const recipe = generateRecipe(dishName, language);
+        const recipe = generateRecipe(dishName, language, personCount);
         onRecipeGenerated(recipe);
         toast.dismiss();
         toast.success('Recipe generated successfully!');
@@ -46,6 +48,11 @@ const SearchByName = ({ onRecipeGenerated }: SearchByNameProps) => {
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
     console.log(`Language changed to: ${value}`);
+  };
+
+  const handlePersonCountChange = (value: number[]) => {
+    setPersonCount(value[0]);
+    console.log(`Person count changed to: ${value[0]}`);
   };
 
   return (
@@ -92,6 +99,22 @@ const SearchByName = ({ onRecipeGenerated }: SearchByNameProps) => {
           <div className="w-full md:w-auto">
             <LanguageSelector onChange={handleLanguageChange} />
           </div>
+        </div>
+
+        <div className="w-full md:w-64 mx-auto bg-white bg-opacity-80 backdrop-blur-md border border-gray-200 shadow-sm rounded-md p-4">
+          <div className="flex items-center justify-between mb-2">
+            <label className="flex items-center text-sm font-medium text-gray-700">
+              <Users className="h-4 w-4 mr-2" />
+              Servings: {personCount}
+            </label>
+          </div>
+          <Slider 
+            value={[personCount]} 
+            min={1} 
+            max={10} 
+            step={1} 
+            onValueChange={handlePersonCountChange} 
+          />
         </div>
 
         <div className="flex justify-center">

@@ -1,5 +1,14 @@
+
 // This is a mock implementation for demonstration purposes
 // In a real application, this would connect to a backend service or API
+
+interface Nutrition {
+  calories: string;
+  protein: string;
+  carbs: string;
+  fat: string;
+  fiber: string;
+}
 
 interface Recipe {
   title: string;
@@ -14,6 +23,7 @@ interface Recipe {
   tips?: string[];
   video?: string;
   language?: string;
+  nutrition?: Nutrition;
 }
 
 // Mock data for recipe generation
@@ -46,7 +56,14 @@ const mockRecipes: { [key: string]: Recipe } = {
       'Traditional carbonara doesn\'t include cream – the creaminess comes from the emulsion of eggs, cheese, and pasta water.',
       'Work quickly when adding the egg mixture to prevent the eggs from scrambling.'
     ],
-    video: 'https://example.com/video/carbonara'
+    video: 'https://example.com/video/carbonara',
+    nutrition: {
+      calories: '820 kcal',
+      protein: '40g',
+      carbs: '80g',
+      fat: '38g',
+      fiber: '3g'
+    }
   },
   'chocolate cake': {
     title: 'Rich Chocolate Cake',
@@ -79,7 +96,14 @@ const mockRecipes: { [key: string]: Recipe } = {
       'For extra moisture, brush each cake layer with simple syrup before frosting.',
       'This cake pairs perfectly with a chocolate ganache or buttercream frosting.'
     ],
-    video: 'https://example.com/video/chocolate-cake'
+    video: 'https://example.com/video/chocolate-cake',
+    nutrition: {
+      calories: '450 kcal',
+      protein: '6g',
+      carbs: '65g',
+      fat: '22g',
+      fiber: '3g'
+    }
   },
   'biryani': {
     title: 'Fragrant Chicken Biryani',
@@ -129,7 +153,14 @@ const mockRecipes: { [key: string]: Recipe } = {
       'For an authentic touch, seal the pot with dough around the edges of the lid to trap the steam.',
       'Allow the biryani to rest after cooking - this helps the flavors meld together perfectly.'
     ],
-    video: 'https://example.com/video/biryani'
+    video: 'https://example.com/video/biryani',
+    nutrition: {
+      calories: '650 kcal',
+      protein: '45g',
+      carbs: '52g',
+      fat: '28g',
+      fiber: '4g'
+    }
   },
   'example dish': {
     title: 'Mediterranean Grilled Salmon',
@@ -161,9 +192,168 @@ const mockRecipes: { [key: string]: Recipe } = {
       'You can also bake the salmon at 400°F (200°C) for 12-15 minutes if you prefer not to grill.',
       'Serve with a side of Greek salad and roasted potatoes for a complete Mediterranean meal.'
     ],
-    video: 'https://example.com/video/mediterranean-salmon'
+    video: 'https://example.com/video/mediterranean-salmon',
+    nutrition: {
+      calories: '380 kcal',
+      protein: '36g',
+      carbs: '2g',
+      fat: '24g',
+      fiber: '0.5g'
+    }
   }
 };
+
+// Additional recipes for a wider variety of cuisines
+const additionalRecipes: { [key: string]: Recipe } = {
+  'butter chicken': {
+    title: 'Creamy Butter Chicken',
+    cookTime: '50 minutes',
+    servings: 4,
+    ingredients: [
+      '800g boneless chicken thighs, cut into bite-sized pieces',
+      '2 cups tomato puree',
+      '1 cup heavy cream',
+      '1/2 cup butter',
+      '2 large onions, finely chopped',
+      '4 cloves garlic, minced',
+      '1-inch piece ginger, grated',
+      '2 tbsp tandoori masala',
+      '1 tbsp garam masala',
+      '1 tsp turmeric powder',
+      '1 tsp ground cumin',
+      '1 tsp red chili powder',
+      '1 tbsp dried fenugreek leaves (kasuri methi)',
+      '2 tbsp honey or sugar',
+      'Salt to taste',
+      'Fresh coriander leaves for garnish'
+    ],
+    instructions: [
+      'In a large bowl, mix the chicken with tandoori masala, turmeric, and 1 tsp salt. Let it marinate for at least 30 minutes or up to overnight in the refrigerator.',
+      'Heat 2 tbsp of butter in a large pan over medium-high heat. Add the marinated chicken pieces and cook until they are browned on all sides, about 5-7 minutes. Remove and set aside.',
+      'In the same pan, add the remaining butter. Add onions and sauté until they turn translucent.',
+      'Add ginger and garlic, and sauté for another 1-2 minutes until fragrant.',
+      'Add tomato puree, garam masala, cumin, red chili powder, and salt. Cook the mixture for about 10-15 minutes until the oil starts to separate from the sauce.',
+      'Return the chicken to the pan and mix well with the sauce. Cook for 5 minutes.',
+      'Reduce the heat and add the heavy cream, stirring continuously to avoid curdling.',
+      'Add honey or sugar and dried fenugreek leaves. Mix well and simmer for 5-10 minutes until the chicken is fully cooked and the sauce has thickened slightly.',
+      'Garnish with fresh coriander leaves before serving. Enjoy with naan bread or steamed rice.'
+    ],
+    tips: [
+      'For a richer flavor, use bone-in chicken pieces and remove the bones before serving.',
+      'If the sauce is too thick, add a little water or chicken stock to achieve your desired consistency.',
+      'You can substitute heavy cream with coconut cream for a dairy-free version.'
+    ],
+    video: 'https://example.com/video/butter-chicken',
+    nutrition: {
+      calories: '580 kcal',
+      protein: '42g',
+      carbs: '15g',
+      fat: '39g',
+      fiber: '2g'
+    }
+  },
+  'pad thai': {
+    title: 'Authentic Pad Thai',
+    cookTime: '30 minutes',
+    servings: 4,
+    ingredients: [
+      '8 oz rice noodles',
+      '2 tbsp vegetable oil',
+      '2 eggs, lightly beaten',
+      '2 cloves garlic, minced',
+      '8 oz tofu, cut into small cubes (or chicken/shrimp)',
+      '2 cups bean sprouts',
+      '4 green onions, chopped',
+      '1/4 cup roasted peanuts, chopped',
+      '1/4 cup fresh cilantro, chopped',
+      'Lime wedges for serving',
+      'For the sauce:',
+      '3 tbsp fish sauce',
+      '3 tbsp brown sugar',
+      '2 tbsp tamarind paste',
+      '1 tbsp rice vinegar',
+      '1 tsp sriracha sauce (optional)'
+    ],
+    instructions: [
+      'Soak the rice noodles in hot water for 8-10 minutes until they're soft but still firm. Drain and set aside.',
+      'In a small bowl, mix all the sauce ingredients together until the sugar dissolves. Set aside.',
+      'Heat oil in a large wok or skillet over medium-high heat. Add the beaten eggs and scramble until just set, about 30 seconds.',
+      'Add garlic and stir for 15 seconds until fragrant.',
+      'Add tofu (or protein of choice) and cook until lightly browned, about 3-4 minutes.',
+      'Add the drained noodles and the prepared sauce. Toss well and cook for 2-3 minutes until the noodles absorb the sauce.',
+      'Add bean sprouts and half the green onions. Stir-fry for another minute.',
+      'Remove from heat and transfer to serving plates.',
+      'Garnish with the remaining green onions, chopped peanuts, cilantro, and lime wedges.',
+      'Serve hot and enjoy!'
+    ],
+    tips: [
+      'Don't soak the noodles for too long or they'll become mushy when stir-fried.',
+      'Prepare all ingredients before you start cooking as the process goes quickly.',
+      'If using chicken or shrimp, cook them thoroughly before adding the noodles.'
+    ],
+    video: 'https://example.com/video/pad-thai',
+    nutrition: {
+      calories: '420 kcal',
+      protein: '18g',
+      carbs: '58g',
+      fat: '14g',
+      fiber: '4g'
+    }
+  },
+  'tacos al pastor': {
+    title: 'Tacos Al Pastor',
+    cookTime: '1 hour 30 minutes',
+    servings: 6,
+    ingredients: [
+      '1 kg pork shoulder, thinly sliced',
+      '1 pineapple, peeled and sliced',
+      '12 small corn tortillas',
+      '1 small onion, finely diced',
+      '1/2 cup fresh cilantro, chopped',
+      'Lime wedges for serving',
+      'For the marinade:',
+      '3 dried guajillo chilies, stems and seeds removed',
+      '2 dried ancho chilies, stems and seeds removed',
+      '4 cloves garlic',
+      '1/2 onion, roughly chopped',
+      '1/4 cup pineapple juice',
+      '2 tbsp white vinegar',
+      '1 tbsp achiote paste',
+      '1 tsp dried oregano',
+      '1 tsp ground cumin',
+      '1 tsp salt',
+      '1/2 tsp black pepper'
+    ],
+    instructions: [
+      'For the marinade: Soak the dried chilies in hot water for 15-20 minutes until soft. Drain.',
+      'In a blender, combine the soaked chilies, garlic, onion, pineapple juice, vinegar, achiote paste, oregano, cumin, salt, and pepper. Blend until smooth.',
+      'Place the sliced pork in a large bowl or ziplock bag. Pour the marinade over the pork, ensuring all pieces are well coated. Cover and refrigerate for at least 4 hours, preferably overnight.',
+      'When ready to cook, preheat your grill or a large skillet over medium-high heat.',
+      'Grill the marinated pork for 3-4 minutes on each side until cooked through and slightly charred on the edges.',
+      'Grill the pineapple slices for 1-2 minutes per side until lightly caramelized.',
+      'Chop the cooked pork and pineapple into small pieces.',
+      'Warm the corn tortillas on the grill or in a dry skillet for about 30 seconds per side.',
+      'To assemble: Place a portion of the chopped pork on each tortilla, top with pineapple, diced onion, and cilantro.',
+      'Serve with lime wedges on the side.'
+    ],
+    tips: [
+      'For authentic flavor, cook the meat on a vertical spit if you have access to one.',
+      'Make sure the pork is sliced very thinly for quick cooking and tender results.',
+      'If you can't find achiote paste, substitute with 1 tbsp paprika and 1 tsp turmeric.'
+    ],
+    video: 'https://example.com/video/tacos-al-pastor',
+    nutrition: {
+      calories: '380 kcal',
+      protein: '28g',
+      carbs: '24g',
+      fat: '18g',
+      fiber: '3g'
+    }
+  }
+};
+
+// Merge the recipe collections
+Object.assign(mockRecipes, additionalRecipes);
 
 // Function to adjust ingredient quantities based on serving size
 const adjustIngredientQuantities = (ingredients: string[], originalServings: number, newServings: number): string[] => {
@@ -248,7 +438,14 @@ export const generateRecipe = (dishName: string, language: string = 'en', servin
           'This is a versatile recipe that can be adapted with different spices and herbs.',
           'For a heartier meal, serve with rice or crusty bread.'
         ],
-        video: 'https://example.com/video/generic-recipe'
+        video: 'https://example.com/video/generic-recipe',
+        nutrition: {
+          calories: '350 kcal',
+          protein: '15g',
+          carbs: '30g',
+          fat: '18g',
+          fiber: '4g'
+        }
       };
   
   // Save the original servings
@@ -257,6 +454,74 @@ export const generateRecipe = (dishName: string, language: string = 'en', servin
   // Adjust ingredient quantities if servings are different
   if (servings !== originalServings) {
     recipe.ingredients = adjustIngredientQuantities(recipe.ingredients, originalServings, servings);
+    recipe.servings = servings;
+  }
+  
+  // Save original English recipe before translation
+  const originalRecipe = {
+    originalTitle: recipe.title,
+    originalIngredients: [...recipe.ingredients],
+    originalInstructions: [...recipe.instructions]
+  };
+  
+  // Translate the recipe based on the language
+  const translatedRecipe = translateRecipe(recipe, language);
+  
+  // If language is not English, include original English content
+  if (language !== 'en') {
+    return {
+      ...translatedRecipe,
+      ...originalRecipe,
+      language
+    };
+  }
+  
+  return translatedRecipe;
+};
+
+// Generate a recipe based on provided ingredients
+export const generateRecipeFromIngredients = (ingredientsInput: string, language: string = 'en', servings: number = 4): Recipe => {
+  const ingredientsList = ingredientsInput.split(',').map(item => item.trim());
+  
+  // Mock functionality to choose a recipe based on ingredients
+  // In a real app, this would be a more complex algorithm or AI model
+  
+  // Count how many ingredients match with each recipe
+  const recipeMatches = Object.entries(mockRecipes).map(([key, recipe]) => {
+    const normalizedRecipeIngredients = recipe.ingredients.map(ing => ing.toLowerCase());
+    const matchCount = ingredientsList.filter(ing => 
+      normalizedRecipeIngredients.some(recipeIng => recipeIng.includes(ing.toLowerCase()))
+    ).length;
+    
+    return { key, matchCount, matchRatio: matchCount / ingredientsList.length };
+  });
+  
+  // Sort by match ratio and get the best match
+  recipeMatches.sort((a, b) => b.matchRatio - a.matchRatio);
+  const bestMatch = recipeMatches[0].key;
+  
+  // Get the recipe and customize it with the user's ingredients
+  let recipe = { ...mockRecipes[bestMatch] };
+  
+  // Customize the recipe title to reflect it's based on user ingredients
+  recipe.title = `${recipe.title} (Your Ingredients)`;
+  
+  // Generate a list of missing ingredients that might be important
+  const recipeIngredients = recipe.ingredients.map(ing => ing.toLowerCase());
+  const missingImportantIngredients = recipeIngredients.filter(ing => 
+    !ingredientsList.some(userIng => ing.includes(userIng.toLowerCase()))
+  ).slice(0, 3);
+  
+  if (missingImportantIngredients.length > 0) {
+    recipe.tips = [
+      `Consider adding ${missingImportantIngredients.join(', ')} for the most authentic flavor.`,
+      ...(recipe.tips || [])
+    ];
+  }
+  
+  // Adjust servings
+  if (servings !== recipe.servings) {
+    recipe.ingredients = adjustIngredientQuantities(recipe.ingredients, recipe.servings, servings);
     recipe.servings = servings;
   }
   
@@ -293,16 +558,16 @@ export const translateRecipe = (recipe: Recipe, language: string): Recipe => {
   
   // Basic translation mapping for demonstration
   const translations: {[key: string]: {title: string}} = {
-    'es': { title: `${recipe.title} (Spanish)` },
-    'fr': { title: `${recipe.title} (French)` },
-    'de': { title: `${recipe.title} (German)` },
-    'it': { title: `${recipe.title} (Italian)` },
-    'zh': { title: `${recipe.title} (Chinese)` },
-    'ja': { title: `${recipe.title} (Japanese)` },
-    'ko': { title: `${recipe.title} (Korean)` },
-    'ar': { title: `${recipe.title} (Arabic)` },
-    'hi': { title: `${recipe.title} (Hindi)` },
-    'te': { title: `${recipe.title} (Telugu)` },
+    'es': { title: `${recipe.title} (Spanish Version)` },
+    'fr': { title: `${recipe.title} (French Version)` },
+    'de': { title: `${recipe.title} (German Version)` },
+    'it': { title: `${recipe.title} (Italian Version)` },
+    'zh': { title: `${recipe.title} (Chinese Version)` },
+    'ja': { title: `${recipe.title} (Japanese Version)` },
+    'ko': { title: `${recipe.title} (Korean Version)` },
+    'ar': { title: `${recipe.title} (Arabic Version)` },
+    'hi': { title: `${recipe.title} (Hindi Version)` },
+    'te': { title: `${recipe.title} (Telugu Version)` },
   };
   
   if (translations[language]) {
