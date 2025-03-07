@@ -567,7 +567,7 @@ export const translateRecipe = (recipe: Recipe, language: string): Recipe => {
     'ko': { title: `${recipe.title} (Korean Version)` },
     'ar': { title: `${recipe.title} (Arabic Version)` },
     'hi': { title: `${recipe.title} (Hindi Version)` },
-    'te': { title: `${recipe.title} (Telugu Version)` },
+    'te': { title: `${recipe.title} (Telugu Version)` }
   };
   
   if (translations[language]) {
